@@ -1,0 +1,396 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.ClipShelf-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/sources",
+      "importPath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipCell.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipItem.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardMonitor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/HotKeyManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/LauncherWindowController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/PasteController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "ClipShelf",
+      "moduleOutputPath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/Modules/ClipShelf.swiftmodule",
+      "objects" : [
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell.swift.o",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem.swift.o",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor.swift.o",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore.swift.o",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager.swift.o",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController.swift.o",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController.swift.o",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "ClipShelf_main",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "pasteralternative"
+      ],
+      "outputFileMapPath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/Modules/ClipShelf.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipCell.swift",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipItem.swift",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardMonitor.swift",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardStore.swift",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/HotKeyManager.swift",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/LauncherWindowController.swift",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/PasteController.swift",
+        "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/main.swift"
+      ],
+      "tempsPath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "ClipShelf" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "ClipShelf",
+      "-package-name",
+      "pasteralternative",
+      "-c",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipCell.swift",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipItem.swift",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardMonitor.swift",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardStore.swift",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/HotKeyManager.swift",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/LauncherWindowController.swift",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/PasteController.swift",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/main.swift",
+      "-I",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "ClipShelf_main",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "pasteralternative",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "ClipShelf" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf-entitlement.plist"
+    },
+    "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipCell.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipItem.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardMonitor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/HotKeyManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/LauncherWindowController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/PasteController.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/sources"
+    },
+    "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.product/Objects.LinkFileList"
+    },
+    "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

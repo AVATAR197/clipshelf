@@ -1,0 +1,61 @@
+{
+  "": {
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/master.swiftdeps"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipCell.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipCell.dia"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipItem.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipItem.dia"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardMonitor.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardMonitor.dia"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/ClipboardStore.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/ClipboardStore.dia"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/HotKeyManager.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/HotKeyManager.dia"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/LauncherWindowController.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/LauncherWindowController.dia"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/PasteController.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/PasteController.dia"
+  },
+  "/Users/danieldopiriak/Documents/projects/pasteralternative/Sources/ClipShelf/main.swift": {
+    "dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main.d",
+    "object": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main.swift.o",
+    "swiftmodule": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main.swiftdeps",
+    "diagnostics": "/Users/danieldopiriak/Documents/projects/pasteralternative/.build/arm64-apple-macosx/debug/ClipShelf.build/main.dia"
+  }
+}
