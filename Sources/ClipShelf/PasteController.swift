@@ -2,44 +2,48 @@ import AppKit
 
 struct PasteTarget {
     var app: NSRunningApplication?
-    var focusedElement: AXUIElement?
+    var processIdentifier: pid_t?
+    var bundleIdentifier: String?
+    var bundleURL: URL?
 }
 
 enum PasteController {
     @MainActor
     static func captureTarget(app: NSRunningApplication?) -> PasteTarget {
-        PasteTarget(app: app, focusedElement: captureFocusedElement())
+        PasteTarget(
+            app: app,
+            processIdentifier: app?.processIdentifier,
+            bundleIdentifier: app?.bundleIdentifier,
+            bundleURL: app?.bundleURL
+        )
     }
 
     @MainActor
     static func paste(_ item: ClipItem, store: ClipboardStore, target: PasteTarget?) {
-        let pasteboard = NSPasteboard.general
-        ClipboardCaptureGate.suppressBriefly()
-        pasteboard.clearContents()
-
-        switch item.kind {
-        case .text:
-            pasteboard.setString(item.text ?? "", forType: .string)
-        case .image:
-            if let image = store.image(for: item) {
-                pasteboard.writeObjects([image])
-            }
-        }
-
-        if item.kind == .text,
-           let text = item.text,
-           let focusedElement = target?.focusedElement,
-           insertText(text, into: focusedElement) {
+        guard write(item, from: store, to: NSPasteboard.general) else {
+            NSSound.beep()
             return
         }
 
-        target?.app?.activate()
+        guard AXIsProcessTrusted() else {
+            // The clip is on the clipboard so a manual Cmd+V still works;
+            // surface the system prompt so auto-paste works next time.
+            NSLog("ClipShelf paste blocked: Accessibility access is not granted for this build.")
+            requestAccessibilityPermission()
+            return
+        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-            let didPaste = sendPasteWithSystemEvents(targetBundleID: target?.app?.bundleIdentifier)
-            if !didPaste {
-                sendCommandV(targetPID: target?.app?.processIdentifier)
+        activate(target)
+        Task { @MainActor in
+            let targetPID = target?.processIdentifier
+            if let targetPID {
+                for _ in 0..<30 where NSWorkspace.shared.frontmostApplication?.processIdentifier != targetPID {
+                    try? await Task.sleep(nanoseconds: 50_000_000)
+                }
             }
+            // Give the target a beat to finish fielding focus before the key event lands.
+            try? await Task.sleep(nanoseconds: 80_000_000)
+            sendCommandV(targetPID: targetPID)
         }
     }
 
@@ -48,13 +52,41 @@ enum PasteController {
         _ = AXIsProcessTrustedWithOptions(options)
     }
 
-    private static func sendCommandV(targetPID: pid_t?) {
-        guard AXIsProcessTrusted() else {
-            NSSound.beep()
-            NSLog("ClipShelf paste blocked because macOS reports Accessibility access is not trusted for this app build.")
+    @MainActor
+    private static func write(_ item: ClipItem, from store: ClipboardStore, to pasteboard: NSPasteboard) -> Bool {
+        ClipboardCaptureGate.suppressBriefly()
+        pasteboard.clearContents()
+
+        switch item.kind {
+        case .text:
+            return pasteboard.setString(item.text ?? "", forType: .string)
+        case .image:
+            guard let image = store.image(for: item) else { return false }
+            return pasteboard.writeObjects([image])
+        }
+    }
+
+    @MainActor
+    private static func activate(_ target: PasteTarget?) {
+        guard let target else { return }
+
+        if let app = target.app, !app.isTerminated {
+            app.activate()
             return
         }
 
+        if let bundleURL = target.bundleURL {
+            let configuration = NSWorkspace.OpenConfiguration()
+            configuration.activates = true
+            NSWorkspace.shared.openApplication(at: bundleURL, configuration: configuration) { _, error in
+                if let error {
+                    NSLog("ClipShelf failed to reactivate target app \(target.bundleIdentifier ?? "unknown"): \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    private static func sendCommandV(targetPID: pid_t?) {
         let source = CGEventSource(stateID: .combinedSessionState)
         source?.localEventsSuppressionInterval = 0
         let keyDown = CGEvent(keyboardEventSource: source, virtualKey: 0x09, keyDown: true)
@@ -62,84 +94,13 @@ enum PasteController {
         keyDown?.flags = .maskCommand
         keyUp?.flags = .maskCommand
 
-        if let targetPID {
+        if targetPID == nil || NSWorkspace.shared.frontmostApplication?.processIdentifier == targetPID {
+            keyDown?.post(tap: .cgSessionEventTap)
+            keyUp?.post(tap: .cgSessionEventTap)
+        } else if let targetPID {
+            // Target never came frontmost; deliver directly so we don't paste into the wrong app.
             keyDown?.postToPid(targetPID)
             keyUp?.postToPid(targetPID)
         }
-
-        keyDown?.post(tap: .cgSessionEventTap)
-        keyUp?.post(tap: .cgSessionEventTap)
-    }
-
-    private static func sendPasteWithSystemEvents(targetBundleID: String?) -> Bool {
-        let activateLine: String
-        if let targetBundleID {
-            activateLine = "tell application id \"\(targetBundleID)\" to activate\n"
-        } else {
-            activateLine = ""
-        }
-
-        let source = """
-        \(activateLine)delay 0.08
-        tell application "System Events"
-            key code 9 using {command down}
-        end tell
-        """
-
-        var error: NSDictionary?
-        NSAppleScript(source: source)?.executeAndReturnError(&error)
-        if let error {
-            NSLog("ClipShelf System Events paste failed: \(error)")
-            return false
-        }
-        return true
-    }
-
-    private static func captureFocusedElement() -> AXUIElement? {
-        guard AXIsProcessTrusted() else { return nil }
-
-        let systemWide = AXUIElementCreateSystemWide()
-        var focusedValue: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(systemWide, kAXFocusedUIElementAttribute as CFString, &focusedValue) == .success,
-              let focusedElement = focusedValue else {
-            return nil
-        }
-
-        return (focusedElement as! AXUIElement)
-    }
-
-    private static func insertText(_ text: String, into element: AXUIElement) -> Bool {
-        guard AXIsProcessTrusted() else { return false }
-
-        var valueRef: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(element, kAXValueAttribute as CFString, &valueRef) == .success,
-              let currentValue = valueRef as? String else {
-            return false
-        }
-
-        var range = CFRange(location: currentValue.utf16.count, length: 0)
-        var rangeRef: CFTypeRef?
-        if AXUIElementCopyAttributeValue(element, kAXSelectedTextRangeAttribute as CFString, &rangeRef) == .success,
-           let axRange = rangeRef {
-            _ = AXValueGetValue(axRange as! AXValue, .cfRange, &range)
-        }
-
-        let nsValue = currentValue as NSString
-        guard range.location >= 0,
-              range.length >= 0,
-              range.location + range.length <= nsValue.length else {
-            return false
-        }
-
-        let nextValue = nsValue.replacingCharacters(in: NSRange(location: range.location, length: range.length), with: text)
-        guard AXUIElementSetAttributeValue(element, kAXValueAttribute as CFString, nextValue as CFString) == .success else {
-            return false
-        }
-
-        var nextRange = CFRange(location: range.location + (text as NSString).length, length: 0)
-        if let axNextRange = AXValueCreate(.cfRange, &nextRange) {
-            _ = AXUIElementSetAttributeValue(element, kAXSelectedTextRangeAttribute as CFString, axNextRange)
-        }
-        return true
     }
 }

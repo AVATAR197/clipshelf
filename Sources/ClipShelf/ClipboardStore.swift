@@ -1,9 +1,11 @@
 import AppKit
+import ImageIO
 
 @MainActor
 final class ClipboardStore {
     private(set) var items: [ClipItem] = []
     private(set) var categories: [String] = ["Inbox"]
+    private var thumbnailCache: [String: NSImage] = [:]
 
     private let maxItems = 250
     private let fileManager = FileManager.default
@@ -73,6 +75,24 @@ final class ClipboardStore {
         return imagesDirectory.appendingPathComponent(filename)
     }
 
+    /// Downsampled, cached preview image for card rendering; use `image(for:)` for pasting.
+    func thumbnail(for item: ClipItem) -> NSImage? {
+        guard let filename = item.imageFilename else { return nil }
+        if let cached = thumbnailCache[filename] { return cached }
+
+        let url = imagesDirectory.appendingPathComponent(filename)
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: 512
+        ]
+        guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { return nil }
+        let image = NSImage(cgImage: cgImage, size: NSSize(width: CGFloat(cgImage.width) / 2, height: CGFloat(cgImage.height) / 2))
+        thumbnailCache[filename] = image
+        return image
+    }
+
     func addCategory(_ name: String) {
         let clean = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !clean.isEmpty, !categories.contains(clean) else { return }
@@ -104,6 +124,9 @@ final class ClipboardStore {
         if let url = imageURL(for: item) {
             try? fileManager.removeItem(at: url)
         }
+        if let filename = item.imageFilename {
+            thumbnailCache[filename] = nil
+        }
         saveAndNotify()
     }
 
@@ -127,6 +150,9 @@ final class ClipboardStore {
         for item in removed {
             if let url = imageURL(for: item) {
                 try? fileManager.removeItem(at: url)
+            }
+            if let filename = item.imageFilename {
+                thumbnailCache[filename] = nil
             }
         }
     }
