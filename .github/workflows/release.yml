@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and package app
+        run: ./Scripts/package-app.sh
+
+      - name: Zip app bundle
+        run: ditto -c -k --keepParent .build/ClipShelf.app ClipShelf.zip
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ClipShelf.zip
+          generate_release_notes: true

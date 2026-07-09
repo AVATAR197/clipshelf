@@ -105,6 +105,15 @@ final class ClipboardStore {
         saveAndNotify()
     }
 
+    func deleteCategory(_ name: String) {
+        guard name != "Inbox", let index = categories.firstIndex(of: name) else { return }
+        categories.remove(at: index)
+        for itemIndex in items.indices where items[itemIndex].category == name {
+            items[itemIndex].category = "Inbox"
+        }
+        saveAndNotify()
+    }
+
     func setCategory(_ category: String, for itemID: UUID) {
         guard let index = items.firstIndex(where: { $0.id == itemID }) else { return }
         addCategory(category)

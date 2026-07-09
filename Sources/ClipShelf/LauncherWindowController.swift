@@ -133,6 +133,93 @@ private final class LauncherPanel: NSPanel {
     override var canBecomeMain: Bool { true }
 }
 
+private enum CategoryPalette {
+    static let colors: [NSColor] = [
+        NSColor(calibratedRed: 0.96, green: 0.40, blue: 0.34, alpha: 1),
+        NSColor(calibratedRed: 0.95, green: 0.67, blue: 0.18, alpha: 1),
+        NSColor(calibratedRed: 0.58, green: 0.38, blue: 0.76, alpha: 1),
+        NSColor(calibratedRed: 0.14, green: 0.68, blue: 0.78, alpha: 1)
+    ]
+
+    /// Stable hash so a category keeps the same color across launches
+    /// (String.hashValue is seeded randomly per process).
+    static func color(for category: String) -> NSColor {
+        var hash: UInt64 = 5381
+        for scalar in category.unicodeScalars {
+            hash = hash &* 31 &+ UInt64(scalar.value)
+        }
+        return colors[Int(hash % UInt64(colors.count))]
+    }
+}
+
+/// Draws its own circle + SF Symbol icon instead of rounding an NSButton's
+/// layer: AppKit manages button layers and can reset cornerRadius, which made
+/// layer-based rounding render as a rounded square.
+private final class CircularHoverButton: NSControl {
+    var symbolName: String? { didSet { needsDisplay = true } }
+    var iconPointSize: CGFloat = 10 { didSet { needsDisplay = true } }
+    var iconWeight = NSFont.Weight.bold { didSet { needsDisplay = true } }
+    var normalBackground = NSColor.clear { didSet { needsDisplay = true } }
+    var hoverBackground = NSColor.clear { didSet { needsDisplay = true } }
+    var normalTint = NSColor.labelColor { didSet { needsDisplay = true } }
+    var hoverTint: NSColor? { didSet { needsDisplay = true } }
+
+    private var isHovered = false { didSet { needsDisplay = true } }
+    private var isPressed = false { didSet { needsDisplay = true } }
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        trackingAreas.forEach(removeTrackingArea)
+        addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect], owner: self, userInfo: nil))
+    }
+
+    override func draw(_ dirtyRect: NSRect) {
+        let diameter = min(bounds.width, bounds.height)
+        let circleRect = NSRect(
+            x: (bounds.width - diameter) / 2,
+            y: (bounds.height - diameter) / 2,
+            width: diameter,
+            height: diameter
+        )
+        (isHovered ? hoverBackground : normalBackground).setFill()
+        NSBezierPath(ovalIn: circleRect).fill()
+
+        guard let symbolName else { return }
+        let tint = isHovered ? (hoverTint ?? normalTint) : normalTint
+        let configuration = NSImage.SymbolConfiguration(pointSize: iconPointSize, weight: iconWeight)
+            .applying(.init(paletteColors: [tint]))
+        guard let icon = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)?
+            .withSymbolConfiguration(configuration) else { return }
+        let iconRect = NSRect(
+            x: bounds.midX - icon.size.width / 2,
+            y: bounds.midY - icon.size.height / 2,
+            width: icon.size.width,
+            height: icon.size.height
+        )
+        icon.draw(in: iconRect, from: .zero, operation: .sourceOver, fraction: isPressed ? 0.6 : 1)
+    }
+
+    override func mouseEntered(with event: NSEvent) {
+        isHovered = true
+    }
+
+    override func mouseExited(with event: NSEvent) {
+        isHovered = false
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        isPressed = true
+    }
+
+    override func mouseUp(with event: NSEvent) {
+        isPressed = false
+        let point = convert(event.locationInWindow, from: nil)
+        if bounds.contains(point), let action {
+            sendAction(action, to: target)
+        }
+    }
+}
+
 @MainActor
 final class LauncherView: NSView, NSSearchFieldDelegate {
     private let store: ClipboardStore
@@ -286,7 +373,7 @@ final class LauncherView: NSView, NSSearchFieldDelegate {
 
         let tint = NSView()
         tint.wantsLayer = true
-        tint.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.3).cgColor
+        tint.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.08).cgColor
         tint.translatesAutoresizingMaskIntoConstraints = false
         addSubview(tint, positioned: .above, relativeTo: blur)
 
@@ -313,12 +400,16 @@ final class LauncherView: NSView, NSSearchFieldDelegate {
         categoryScroll.setContentHuggingPriority(.defaultLow, for: .horizontal)
         categoryScroll.translatesAutoresizingMaskIntoConstraints = false
 
-        let addButton = NSButton(image: NSImage(systemSymbolName: "plus", accessibilityDescription: "New pinboard") ?? NSImage(), target: self, action: #selector(createCategory))
-        addButton.isBordered = false
-        addButton.contentTintColor = NSColor.black.withAlphaComponent(0.6)
-        addButton.wantsLayer = true
-        addButton.layer?.cornerRadius = 14
-        addButton.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.5).cgColor
+        let addButton = CircularHoverButton()
+        addButton.symbolName = "plus"
+        addButton.iconPointSize = 10
+        addButton.iconWeight = .semibold
+        addButton.target = self
+        addButton.action = #selector(createCategory)
+        addButton.normalBackground = NSColor.white.withAlphaComponent(0.5)
+        addButton.hoverBackground = NSColor.white.withAlphaComponent(0.9)
+        addButton.normalTint = NSColor.black.withAlphaComponent(0.6)
+        addButton.hoverTint = NSColor.black.withAlphaComponent(0.85)
         addButton.toolTip = "New pinboard"
         addButton.translatesAutoresizingMaskIntoConstraints = false
 
@@ -391,8 +482,8 @@ final class LauncherView: NSView, NSSearchFieldDelegate {
             categoryScroll.heightAnchor.constraint(equalToConstant: 30),
             searchField.widthAnchor.constraint(equalToConstant: 220),
             searchField.heightAnchor.constraint(equalToConstant: 28),
-            addButton.widthAnchor.constraint(equalToConstant: 28),
-            addButton.heightAnchor.constraint(equalToConstant: 28),
+            addButton.widthAnchor.constraint(equalToConstant: 22),
+            addButton.heightAnchor.constraint(equalToConstant: 22),
 
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -429,6 +520,13 @@ final class LauncherView: NSView, NSSearchFieldDelegate {
         button.onDropClip = { [weak self] clipID, category in
             guard let self, let category else { return }
             self.store.setCategory(category, for: clipID)
+        }
+        button.onDeleteCategory = { [weak self] category in
+            guard let self else { return }
+            if self.selectedCategory == category {
+                self.selectedCategory = nil
+            }
+            self.store.deleteCategory(category)
         }
         button.heightAnchor.constraint(equalToConstant: 28).isActive = true
         categoryStack.addArrangedSubview(button)
@@ -548,7 +646,7 @@ private final class ClipCardView: NSView, NSDraggingSource {
     private let store: ClipboardStore
     private let content = NSView()
     private let ageLabel = NSTextField(labelWithString: "")
-    private let deleteButton = NSButton()
+    private let deleteButton = CircularHoverButton()
     private var mouseDownPoint: NSPoint?
     private var didStartDrag = false
     private var isHovered = false {
@@ -667,16 +765,14 @@ private final class ClipCardView: NSView, NSDraggingSource {
         detailLabel.textColor = .tertiaryLabelColor
         detailLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        let deleteImage = NSImage(systemSymbolName: "xmark", accessibilityDescription: "Delete clip")?
-            .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 9, weight: .bold))
-        deleteButton.image = deleteImage
+        deleteButton.symbolName = "xmark"
+        deleteButton.iconPointSize = 7
+        deleteButton.iconWeight = .bold
         deleteButton.target = self
         deleteButton.action = #selector(deleteClicked)
-        deleteButton.isBordered = false
-        deleteButton.contentTintColor = .white
-        deleteButton.wantsLayer = true
-        deleteButton.layer?.cornerRadius = 11
-        deleteButton.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.4).cgColor
+        deleteButton.normalTint = .white
+        deleteButton.normalBackground = NSColor.black.withAlphaComponent(0.22)
+        deleteButton.hoverBackground = NSColor.black.withAlphaComponent(0.45)
         deleteButton.toolTip = "Delete"
         deleteButton.isHidden = true
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
@@ -741,10 +837,10 @@ private final class ClipCardView: NSView, NSDraggingSource {
             detailLabel.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -14),
             detailLabel.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: 8),
 
-            deleteButton.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -8),
-            deleteButton.topAnchor.constraint(equalTo: content.topAnchor, constant: 8),
-            deleteButton.widthAnchor.constraint(equalToConstant: 22),
-            deleteButton.heightAnchor.constraint(equalToConstant: 22)
+            deleteButton.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -10),
+            deleteButton.topAnchor.constraint(equalTo: content.topAnchor, constant: 15),
+            deleteButton.widthAnchor.constraint(equalToConstant: 18),
+            deleteButton.heightAnchor.constraint(equalToConstant: 18)
         ])
 
         let trackingArea = NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect], owner: self, userInfo: nil)
@@ -861,14 +957,7 @@ private final class ClipCardView: NSView, NSDraggingSource {
         case .image:
             return NSColor(calibratedRed: 0.22, green: 0.62, blue: 0.86, alpha: 1)
         case .text:
-            let palette = [
-                NSColor(calibratedRed: 0.96, green: 0.40, blue: 0.34, alpha: 1),
-                NSColor(calibratedRed: 0.95, green: 0.67, blue: 0.18, alpha: 1),
-                NSColor(calibratedRed: 0.58, green: 0.38, blue: 0.76, alpha: 1),
-                NSColor(calibratedRed: 0.14, green: 0.68, blue: 0.78, alpha: 1)
-            ]
-            let index = abs(item.category.hashValue) % palette.count
-            return palette[index]
+            return CategoryPalette.color(for: item.category)
         }
     }
 
@@ -882,13 +971,20 @@ private final class ClipCardView: NSView, NSDraggingSource {
 // MARK: - Pinboard pill
 
 private final class CategoryDropButton: NSButton {
-    var category: String?
+    var category: String? {
+        didSet { configureForCategory() }
+    }
     var onDropClip: ((UUID, String?) -> Void)?
+    var onDeleteCategory: ((String) -> Void)?
     var isSelectedCategory = false {
         didSet { applyStyle(dropTargeted: false) }
     }
 
-    private let horizontalPadding: CGFloat = 16
+    private var isHovered = false {
+        didSet { applyStyle(dropTargeted: false) }
+    }
+
+    private let horizontalPadding: CGFloat = 10
 
     override var intrinsicContentSize: NSSize {
         let base = super.intrinsicContentSize
@@ -900,7 +996,7 @@ private final class CategoryDropButton: NSButton {
         registerForDraggedTypes([ClipShelfDrag.clipIDType])
         isBordered = false
         wantsLayer = true
-        layer?.cornerRadius = 14
+        layer?.cornerRadius = 8
         applyStyle(dropTargeted: false)
     }
 
@@ -909,18 +1005,64 @@ private final class CategoryDropButton: NSButton {
         registerForDraggedTypes([ClipShelfDrag.clipIDType])
     }
 
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        trackingAreas.forEach(removeTrackingArea)
+        addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect], owner: self, userInfo: nil))
+    }
+
+    override func mouseEntered(with event: NSEvent) {
+        isHovered = true
+    }
+
+    override func mouseExited(with event: NSEvent) {
+        isHovered = false
+    }
+
+    private func configureForCategory() {
+        if let category {
+            image = Self.dotImage(color: CategoryPalette.color(for: category))
+            imagePosition = .imageLeading
+            imageHugsTitle = true
+            if category != "Inbox" {
+                let contextMenu = NSMenu()
+                let deleteItem = NSMenuItem(title: "Delete Pinboard", action: #selector(deleteCategoryClicked), keyEquivalent: "")
+                deleteItem.target = self
+                contextMenu.addItem(deleteItem)
+                menu = contextMenu
+            }
+        } else {
+            image = nil
+            menu = nil
+        }
+        invalidateIntrinsicContentSize()
+    }
+
+    @objc private func deleteCategoryClicked() {
+        guard let category else { return }
+        onDeleteCategory?(category)
+    }
+
     private func applyStyle(dropTargeted: Bool) {
         font = .systemFont(ofSize: 12.5, weight: isSelectedCategory ? .semibold : .medium)
-        contentTintColor = isSelectedCategory ? .labelColor : .secondaryLabelColor
+        contentTintColor = isSelectedCategory || isHovered ? .labelColor : .secondaryLabelColor
         if dropTargeted {
             layer?.backgroundColor = NSColor.controlAccentColor.withAlphaComponent(0.35).cgColor
+        } else if isHovered {
+            layer?.backgroundColor = NSColor.black.withAlphaComponent(0.06).cgColor
         } else {
-            layer?.backgroundColor = isSelectedCategory
-                ? NSColor.white.withAlphaComponent(0.92).cgColor
-                : NSColor.white.withAlphaComponent(0.4).cgColor
+            layer?.backgroundColor = NSColor.clear.cgColor
         }
-        layer?.borderWidth = 1
-        layer?.borderColor = NSColor.black.withAlphaComponent(isSelectedCategory ? 0.14 : 0.06).cgColor
+    }
+
+    private static func dotImage(color: NSColor) -> NSImage {
+        // Transparent trailing padding creates the gap between the dot and
+        // the title; NSButton has no image-to-title spacing property.
+        NSImage(size: NSSize(width: 13, height: 9), flipped: false) { _ in
+            color.setFill()
+            NSBezierPath(ovalIn: NSRect(x: 0, y: 0, width: 9, height: 9)).fill()
+            return true
+        }
     }
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
